@@ -71,13 +71,14 @@
       var formData = new FormData(this);
 
       $.ajax({
-        url: 'http://localhost/php-image-be/upload_handler.php/upload',
+        url: 'https://post77x.com/admin/upload_handler.php/upload',
         type: 'POST',
         data: formData,
         contentType: false,
         processData: false,
         success: function (response) {
           if (response) {
+            $("#uploadForm")[0].reset();
             loadTmages();
             $("#message").html('<div class="alert alert-success">Upload successful!</div>');
           } else {
@@ -90,9 +91,10 @@
 
   function loadTmages() {
     $.ajax({
-      url: 'http://localhost/php-image-be/pictures_api.php/list',
+      url: 'https://post77x.com/admin/pictures_api.php/list',
       method: 'GET',
       success: function (data) {
+        $('#gallery').html('')
         var gallery = $('#gallery');
         data.forEach(function (picture) {
           var mimeType = `image/${picture.extension}`;
@@ -102,6 +104,7 @@
                             <img src="data:${mimeType};base64,${picture.base64}" class="card-img-top clickable-image" alt="${picture.name}" data-name="${picture.name}" data-src="data:${mimeType};base64,${picture.base64}">
                             <div class="card-body">
                                 <p class="card-text">${picture.name}</p>
+                                <button type="button" onclick="deleteFile('${picture.name}')" class="btn btn-danger">Delete</button>
                             </div>
                         </div>
                     </div>
@@ -122,6 +125,24 @@
       },
       error: function () {
         alert('Failed to load pictures');
+      }
+    });
+  }
+
+  function deleteFile(filename) {
+    $.ajax({
+      url: 'https://post77x.com/admin/pictures_api.php/delete',
+      dataType: 'json',
+      type: 'POST',
+      data: { filename: filename },
+      success: function (response) {
+        if (response) {
+          $("#uploadForm")[0].reset();
+          loadTmages();
+          $("#message").html('<div class="alert alert-success">Delete successful!</div>');
+        } else {
+          $("#message").html('<div class="alert alert-danger">Delete failed</div>');
+        }
       }
     });
   }

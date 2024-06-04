@@ -47,7 +47,7 @@
       var password = $("#password").val();
 
       $.ajax({
-        url: 'http://localhost/php-image-be/auth.php/login',
+        url: 'https://post77x.com/admin/auth.php/login',
         dataType: "json",
         type: 'POST',
         data: {
@@ -55,7 +55,7 @@
           password: password
         },
         success: function (response) {
-          if (response) {
+          if (response.status === 'Success') {
             window.location.href = "upload.php";
           } else {
             alert("Fail")
@@ -67,7 +67,7 @@
 
   function checkService() {
     $.ajax({
-      url: 'http://localhost/php-image-be/auth.php/health',
+      url: 'https://post77x.com/admin/auth.php/health',
       dataType: "json",
       type: 'GET',
       cache: false,
